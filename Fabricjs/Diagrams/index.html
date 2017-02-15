@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas Examples</title>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+        <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.css" />
+        <link href="./css/app.css" rel="stylesheet" />
+    </head>
+    <body>
+        <header class="container-fluid">
+            <div class="row">
+                <aside class="col-sm-2">
+                </aside>
+
+                <aside class="col-sm-5">
+                    <h1 class="header white-box">Canvas Walkthrough</h1>
+                </aside>
+
+                <aside class="col-sm-5">
+                    <img src="assets/card-1961951_640.png" class="icon" />
+                    <img src="assets/heart-81207_1280.jpg" class="icon" />
+                    <img src="assets/love-903178_1280.jpg" class="icon" />
+                    <img src="assets/penguin-161288_1280.png" class="icon" />
+                    <img src="assets/red-rose-320868_640.jpg" class="icon" />
+                </aside>
+            </div>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row">
+                <aside class="col-sm-4">
+                </aside>
+
+                <aside class="col-sm-6 white-box">
+                    Tutorial at <a href="http://html5doctor.com/video-canvas-magic/">http://html5doctor.com/video-canvas-magic/</a>
+                </aside>
+
+                <aside class="col-sm-2">
+                    <button type="button" onclick="var video = document.getElementById('v'); video.src = './assets/19_20Dragon_20Coaster_20Part_203.mp4'; video.play(); document.getElementById('rollercoster').style.display = 'block'">Watch Rollercoster</button>
+
+                    <div id="rollercoster">
+                        Stock footage by <a rel="nofollow" href="http://www.Videezy.com">Videezy!</a>
+                    </div>
+                </aside>
+            </div>
+
+            <div class="row">
+                <aside class="col-sm-4">
+                </aside>
+                <aside class="col-sm-2">
+                    <video id="v" controls loop width="320" height="240">
+                        <source src="assets/video.webm" type=video/webm>
+                        <source src="assets/video.ogg" type=video/ogg>
+                        <source src="assets/video.mp4" type=video/mp4>
+                    </video>
+                </aside>
+
+                <aside class="col-sm-2">
+                    <canvas id="c"></canvas>
+                </aside>
+
+                <aside class="col-sm-4">
+                    <div id="text_video" style="font-family: 'Lucida Console', Monaco, monospace;font-size: 0.3em; display: inline-block;" class='text-movie'>[Text Video]</div>
+                </aside>
+            </div>
+        </div>
+
+        <script src="scripts/ascii.js"></script>
+        <script src="scripts/tracking.js"></script>
+        <script src="bootstrap/js/bootstrap.js"></script>
+        <script>
+            // Load web worker shim if needed
+            if (!window.Worker || window.forceIframeWorker)
+            {
+                var fileref = document.createElement('script');
+                fileref.setAttribute("type", "text/javascript");
+                fileref.setAttribute("src", "scripts/webworkershim.js");
+            }
+
+            document.addEventListener('DOMContentLoaded', function(){
+                var v = document.getElementById('v');
+                var canvas = document.getElementById('c');
+                canvas.width = 200;
+                canvas.height = 80;
+
+                var context = canvas.getContext('2d');
+
+                var cw = Math.floor(canvas.clientWidth);
+                var ch = Math.floor(canvas.clientHeight);
+                canvas.width = cw;
+                canvas.height = ch;
+
+                v.addEventListener('play', function(){
+                    draw(this, context, cw, ch);
+                },false);
+            },false);
+
+            function draw(v, c, w, h) {
+                if(v.paused || v.ended)
+                    return false;
+
+                c.drawImage(v, 0, 0, w, h);
+                setTimeout(draw, 20, v, c, w, h);
+
+                var image = c.getImageData(0, 0, w, h);
+                var text = GetAsciiTextSimple(image);
+
+                document.getElementById("text_video").innerHTML = text;
+            }
+        </script>
+    </body>
+</html>
